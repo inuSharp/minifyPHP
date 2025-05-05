@@ -1,0 +1,49 @@
+createApp({
+
+  // #### data ####
+  input: '',
+  inputRef: null,
+  result: '',
+  history: [
+    'nmap -sS 192.168.1.1',
+    'hydra -l admin -P passwords.txt 192.168.1.1 ssh',
+    'echo "Access Granted!"'
+  ],
+
+  // #### method ####
+  async submitCommand() {
+    if (!this.input.trim()) {
+      return;
+    }
+
+    const command = this.input.trim();
+    this.input = '';
+    this.result = '';
+    if (command === 'clear') {
+        return;
+    }
+
+    const terminal = document.getElementById('app');
+    terminal.scrollTop = terminal.scrollHeight;
+
+    const response = await fetch('@WEB_ROOT/api/command/run', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // JSONを送る場合
+      },
+      body: JSON.stringify({
+        command: command,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`レスポンスステータス: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    this.result = data.result;
+    document.getElementById('command').focus();
+  }
+}).mount('#app');
+
