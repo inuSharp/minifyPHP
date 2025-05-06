@@ -4,6 +4,12 @@
 
  cd C:\Users\sg\prj\minifyPHP && php build.php
 
+# release
+cd C:\Users\sg\prj\minifyPHP\release
+php -S 0.0.0.0:8081
+echo "done" &&
+
+http://localhost:8081/
 
 */
 
@@ -44,7 +50,10 @@ $js = JsMin::minify(file_get_contents('src/js.txt'));
 
 // php
 $php = '';
-$php .= ltrim(file_get_contents('src/php/apiFunctions.php'), '<?php');
+$requires = explode("\n", trim(file_get_contents('src/php/framework_requirements.txt')));
+foreach ($requires as $r) {
+    $php .= ltrim(file_get_contents(trim($r)), '<?php');
+}
 
 // HtmlMin::minifyすると@Cが消えるので先にstyleを置き換え
 $html = file_get_contents('src/html.txt');
@@ -52,7 +61,6 @@ $html = str_replace(['@C'], [$css], $html);
 $html = simpleHtmlMinify($html);
 $html = str_replace(['@J'], [$js], $html);
 $index = str_replace(['@PHP', '@HTML'], [$php, $html], $index);
-// TODO // debug{ から // }debug までを削除
 $index = preg_replace('/\/\/ debug\{.*?\/\/ \}debug/s', '', $index);
 
 

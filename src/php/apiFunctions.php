@@ -72,3 +72,29 @@ function getCommandRequest() {
         return $commandRqeust;
     }
 }
+
+function setWebDefines() {
+    $protocol   = isset($_SERVER["https"]) ? 'https' : 'http';
+    $domain     =  $protocol . '://' . $_SERVER['HTTP_HOST'];
+    $requestUrl = $domain . $_SERVER['REQUEST_URI'];
+    $route      = ltrim(str_replace($domain, '', $requestUrl), '/');
+    if ($route == '') { $route = 'index'; }
+    if ($route === 'favicon.ico') { echo 'test'; exit(); }
+    define("WEB_ROOT"      , $domain);
+    define("REQUEST_URL"   , $requestUrl);
+    define("REQUEST_ROUTE" , $route);
+    define("REQUEST_METHOD", $_SERVER["REQUEST_METHOD"]);
+    $path = explode('?', REQUEST_ROUTE)[0];
+    $paths = explode('/', $path);
+    define("REQUEST_ROUTE_TOP" , $paths[0]);
+    
+    if (REQUEST_ROUTE_TOP === 'api') {
+        array_shift($paths);
+        define("API_ROUTE" , $paths[0]);
+        array_shift($paths);
+        define("CONTROLLER_METHOD" , $paths[0]);
+    } else {
+        define("API_ROUTE" , '');
+    }
+}
+
