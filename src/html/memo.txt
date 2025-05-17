@@ -1,0 +1,4 @@
+<div style="display: flex;">
+  <div id="memo_index"></div>
+  <div id="memo"></div>
+</div>

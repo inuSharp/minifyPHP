@@ -1,7 +1,3 @@
-[v-cloak] {
-  display: none;
-}
-
 * {
     padding: 0px;
     margin: 0px;
@@ -25,24 +21,33 @@
     border-radius: 0px;
   }
 
-
   html, body {
     height: 100%;
     background: #000;
   }
-  .terminal {
+  button {
+    cursor: pointer;
+    color: #eed700;
+    background-color: #000;
+    border: 1px solid #eed700;
+    padding: 4px 12px;
+    margin-bottom: 2px;
+  }
+  #app {
     height: 100vh;
     background: #000;
     color: #eed700;
-    border: 2px solid #eed700;
+    border: 1px solid #eed700;
     overflow-y: auto;
     overflow-x: hidden;
     /* white-space: pre-wrap; */
     word-wrap: break-word;
     font-size: 16px;
     line-height: 1.4;
-    text-shadow: 0 0 5px #eed700;
     box-sizing: border-box;
+  }
+  #main {
+    height: 100%;
   }
   .prompt {
     margin-bottom: 8px;
@@ -66,8 +71,43 @@
     outline: none;
     flex-grow: 1;
     caret-color: #eed700;
-    text-shadow: 0 0 5px #eed700;
     white-space: pre-wrap;
   }
+  input[type="checkbox"] {
+    accent-color: #eed700;
+  }
 
+  .tabs {
+    margin-left: -1px;
+    display: flex;
+  }
+  .tab {
+    min-width: 200px;
+    cursor: pointer;
+    border: 1px solid #eed700;
+    padding: 4px 12px;
+  }
+  .tab.is_active {
+    background-color: #eed700;
+    color: #000;
+  }
+  .tab_contents {
+    margin-top: -1px;
+    margin-left: -1px;
+    border: 1px solid #eed700;
+    padding: 2px;
+    height: 100%;
+  }
+  .section {
+    margin-bottom: 20px;
+  }
+
+  .memo_index {
+    min-width: 200px;
+    text-align: left;
+  }
+
+  #memo {
+    margin-left: 4px;
+  }
 

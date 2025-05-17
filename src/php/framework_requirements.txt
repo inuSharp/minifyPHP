@@ -1,3 +1,5 @@
 src/php/Log.php
 src/php/File.php
 src/php/apiFunctions.php
+src/php/Parsedown.php
+src/php/Common.php

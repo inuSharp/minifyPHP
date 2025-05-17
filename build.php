@@ -54,6 +54,17 @@ $requires = explode("\n", trim(file_get_contents('src/php/framework_requirements
 foreach ($requires as $r) {
     $php .= ltrim(file_get_contents(trim($r)), '<?php');
 }
+$featureFiles = getFileLists('src/php');
+foreach ($featureFiles as $featureFile) {
+    $featureFile = str_replace('\\', '/', $featureFile);
+    if (in_array($featureFile, $requires)) {
+        continue;
+    }
+    if ($featureFile === 'src/php/framework_requirements.txt') {
+        continue;
+    }
+    $php .= ltrim(file_get_contents($featureFile), '<?php');
+}
 
 // HtmlMin::minifyすると@Cが消えるので先にstyleを置き換え
 $html = file_get_contents('src/html.txt');

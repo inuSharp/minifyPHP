@@ -1,0 +1,22 @@
+<div style="height: 100%;">
+  <div class="tabs">
+    <div
+      id="default_tab"
+      onclick="Tab.select(this, 'tab_memo')"
+      class="tab is_active"
+    >Memo</div>
+    <div
+      onclick="Tab.select(this, 'tab_command')"
+      class="tab"
+    >DB</div>
+  </div>
+
+  <div class="tab_contents">
+    <div id="tab_memo">
+      @html(memo)
+    </div>
+    <div id="tab_command" style="display: none;">
+      command
+    </div>
+  </div>
+</div>

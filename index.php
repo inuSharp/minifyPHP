@@ -8,15 +8,11 @@ cd C:\Users\sg\prj\minifyPHP
 php -S 0.0.0.0:8080
 echo "done" &&
 
-# release
-cd C:\Users\sg\prj\minifyPHP\release
-php -S 0.0.0.0:8080
-echo "done" &&
-
-
 http://localhost:8080/
 */
 
+date_default_timezone_set('Asia/Tokyo');
+define('PRJ_DIR', dirname(__FILE__));
 
 // build用
 $html = <<<'HTML'
@@ -34,15 +30,45 @@ $requires = explode("\n", trim(file_get_contents('src/php/framework_requirements
 foreach ($requires as $r) {
     require_once(trim($r));
 }
+$featureFiles = getFileLists('src/php');
+foreach ($featureFiles as $featureFile) {
+    $featureFile = str_replace('\\', '/', $featureFile);
+    if (in_array($featureFile, $requires)) {
+        continue;
+    }
+    if ($featureFile === 'src/php/framework_requirements.txt') {
+        continue;
+    }
+    require_once($featureFile);
+}
 
-// $commandFiles = getFileLists('src/php/Commands');
-// foreach ($commandFiles as $commandFile) {
-//     require_once($commandFile);
-// }
+$html = file_get_contents('src/html/layout.txt');
 
-$html = file_get_contents('src/html.txt');
-$html = str_replace(['@C'], [$css], $html);
-$html = str_replace(['@J'], [$js], $html);
+$bef = ['@C', '@J'];
+$aft = [$css, $js];
+
+while (true) {
+    if (preg_match_all('/@html\(.*?\)/s', $html, $matches)) {
+        Log::debug($matches);
+        foreach ($matches[0] as $hit) {
+            $fileName = str_replace(['@html(', ')'], '', $hit);
+            $filePath = 'src/html/' . $fileName . '.txt';
+            if (file_exists($filePath)) {
+                $bef[] = $hit;
+                $aft[] = file_get_contents($filePath);
+            } else {
+                Log::debug('not found:' . $filePath);
+            }
+        }
+    }
+    if (count($bef) !== 0) {
+        $html = str_replace($bef, $aft, $html);
+        $bef = [];
+        $aft = [];
+    } else {
+        break;
+    }
+}
 
 // }debug
 
@@ -51,6 +77,7 @@ setWebDefines();
 if (REQUEST_ROUTE_TOP !== 'api') {
     $html = str_replace(['@WEB_ROOT'], [WEB_ROOT], $html);
     echo $html;
+    // echo generateCalendarHtml(); // 今月
     exit();
 }
 
@@ -58,9 +85,18 @@ if (REQUEST_ROUTE_TOP !== 'api') {
 //      /api/command/run {command: 'php -m'}
 $ret = '';
 switch (API_ROUTE) {
-    case 'api/test':
+    case 'command':
+        $ret = print_r(getConfig(), true);
+        break;
+    case 'memo':
+        if (CONTROLLER_METHOD === 'index') {
+            $ret = getMemoIndexes();
+        }
+        if (CONTROLLER_METHOD === 'search') {
+            $ret = searchMemo();
+        }
         break;
 }
 
-responseJson(['result' => $ret]);
+responseJson(['result' => $ret], 200);
 
