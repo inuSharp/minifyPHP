@@ -24,7 +24,17 @@ HTML;
 // debug{
 
 $css = file_get_contents('src/css.txt');
-$js = file_get_contents('src/js.txt');
+
+$js = file_get_contents('src/js/App.js');
+$jsFiles = glob('src/js/*.js');
+foreach ($jsFiles as $jsFile) {
+    if ($jsFile === 'src/js/App.js') {
+        continue;
+    }
+    $js .= file_get_contents($jsFile) . "\n";
+}
+$js .= 'window.setTimeout(() => { App.start(); }, 100);';
+
 
 $requires = explode("\n", trim(file_get_contents('src/php/framework_requirements.txt')));
 foreach ($requires as $r) {

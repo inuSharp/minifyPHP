@@ -1,4 +1,10 @@
 <div style="display: flex;">
-  <div id="memo_index"></div>
-  <div id="memo"></div>
+  <div id="memo_index_wrap" style="width: 200px;">
+    <div><button onclick="Memo.clearCheck()">clear</button></div>
+    <div style="display: flex;">
+      <div id="memo_index_group"></div>
+      <div id="memo_index_children" style="margin-left: 10px;"></div>
+    </div>
+  </div>
+  <div id="memo" style="margin-left: 10px; width: calc(100% - 200px); height: calc(100vh - 20px); overflow: auto;"></div>
 </div>

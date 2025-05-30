@@ -1,4 +1,5 @@
 <div>
+  <div id="message"></div>
   <button>FIND API</button><br>
   <button>TEST API</button><br>
   <pre

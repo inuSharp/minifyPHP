@@ -94,6 +94,14 @@ function getMemoIndexes() {
         return trim($w) !== '';
     });
 
+    $config = getConfig();
+    $group = $config['INDEX_GROUP'] ?? '';
+    $groupKeys = explode(',', $group);
+    $indexGroup = [];
+    foreach ($groupKeys as $groupKey) {
+        $indexGroup[] = ['group_name' => $groupKey, 'children' => []];
+    }
+
     $allTags = [];
     foreach ($sections as $section) {
         if (preg_match('/.*?Tags:.*?\n/s', $section, $match)) {
@@ -101,23 +109,36 @@ function getMemoIndexes() {
             $tags = array_filter(explode(' ', $tagStr), function($w) {
                 return trim($w) !== '';
             });
+            $tags = array_values($tags);
+            // $tags = array_values(array_diff($tags, $groupKeys));
             $allTags = array_merge($allTags, $tags);
+
+            foreach ($indexGroup as &$group) {
+                if ($group['group_name'] === $tags[0]) {
+                    array_shift($tags);
+                    $group['children'] = $tags;
+                    break;
+                } else {
+                    Log::debug($tags[0]);
+                }
+            }
         }
     }
-
-    $allTags = array_unique($allTags);
-    $html = '';
-    foreach ($allTags as $one) {
-        $html .= '<label><input name="checkIndex" type="checkbox" value="' . $one . '" onchange="Memo.changeIndex()">' . $one . '</label><br>';
-    }
-    return $html;
+    Log::debug($indexGroup);
+    return $indexGroup;
+    // $allTags = array_unique($allTags);
+    // $html = '';
+    // foreach ($allTags as $one) {
+    //     $html .= '<label><input name="checkIndex" type="checkbox" value="' . $one . '" onchange="Memo.changeIndex()"> ' . $one . '</label><br>';
+    // }
+    // return $html;
 }
 
 function searchMemo() {
     $text = file_get_contents('memo.txt');
     $sections = explode('======================================================================', $text);
 
-    $searchWord = 'work done_commit_pr';
+    $searchWord = request('w', '');
     if (trim($searchWord) === '') {
         exit('検索文字を指定してください');
     }
@@ -142,6 +163,8 @@ function searchMemo() {
             }
         }
     }
+
+    $ret .= '<div style="margin-bottom: 50px;">&nbsp;</div>';
     return $ret;
 }
 

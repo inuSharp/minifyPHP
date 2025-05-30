@@ -15,6 +15,7 @@ http://localhost:8081/
 
 // https://github.com/searchturbine/phpwee-php-minifier
 require_once("libs/JsMin/JsMin.php");
+require_once("src/php/File.php");
 
 function minifyCss(string $css): string
 {
@@ -46,7 +47,16 @@ function simpleHtmlMinify(string $html): string
 // 先頭に<?phpは必須。ないとminifyされない
 $index = file_get_contents('index.php');
 $css = minifyCss(file_get_contents('src/css.txt'));
-$js = JsMin::minify(file_get_contents('src/js.txt'));
+
+$js = file_get_contents('src/js/App.js');
+$jsFiles = glob('src/js/*.js');
+foreach ($jsFiles as $jsFile) {
+    if ($jsFile === 'src/js/App.js') {
+        continue;
+    }
+    $js .= file_get_contents($jsFile) . "\n";
+}
+$js .= 'window.setTimeout(() => { App.start(); }, 100);';
 
 // php
 $php = '';
@@ -67,7 +77,30 @@ foreach ($featureFiles as $featureFile) {
 }
 
 // HtmlMin::minifyすると@Cが消えるので先にstyleを置き換え
-$html = file_get_contents('src/html.txt');
+$html = file_get_contents('src/html/layout.txt');
+$bef = ['@C', '@J'];
+$aft = [$css, $js];
+while (true) {
+    if (preg_match_all('/@html\(.*?\)/s', $html, $matches)) {
+        foreach ($matches[0] as $hit) {
+            $fileName = str_replace(['@html(', ')'], '', $hit);
+            $filePath = 'src/html/' . $fileName . '.txt';
+            if (file_exists($filePath)) {
+                $bef[] = $hit;
+                $aft[] = file_get_contents($filePath);
+            } else {
+                echo 'not found:' . $filePath . "\n";
+            }
+        }
+    }
+    if (count($bef) !== 0) {
+        $html = str_replace($bef, $aft, $html);
+        $bef = [];
+        $aft = [];
+    } else {
+        break;
+    }
+}
 $html = str_replace(['@C'], [$css], $html);
 $html = simpleHtmlMinify($html);
 $html = str_replace(['@J'], [$js], $html);

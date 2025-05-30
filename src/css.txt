@@ -24,6 +24,10 @@
   html, body {
     height: 100%;
     background: #000;
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
   button {
     cursor: pointer;
@@ -38,11 +42,10 @@
     background: #000;
     color: #eed700;
     border: 1px solid #eed700;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     /* white-space: pre-wrap; */
     word-wrap: break-word;
-    font-size: 16px;
+    font-size: 12px;
     line-height: 1.4;
     box-sizing: border-box;
   }
@@ -67,13 +70,13 @@
     background: transparent;
     border: none;
     color: #eed700;
-    font-size: 16px;
+    font-size: 12px;
     outline: none;
     flex-grow: 1;
     caret-color: #eed700;
     white-space: pre-wrap;
   }
-  input[type="checkbox"] {
+  input[type="checkbox"], input[type="radio"] {
     accent-color: #eed700;
   }
 
@@ -109,5 +112,11 @@
 
   #memo {
     margin-left: 4px;
+  }
+
+  pre {
+    border-top: 1px dotted #eed700;
+    border-bottom: 1px dotted #eed700;
+    cursor: pointer;
   }
 
