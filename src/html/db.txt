@@ -1,0 +1,11 @@
+<div style="display: flex;">
+  <div id="db_index_wrap" style="width: 200px;">
+    <div><button onclick="DB.clearCheck()">clear</button></div>
+    <div style="display: flex;">
+      <div id="db_index"></div>
+      <div id="db_tables" style="margin-left: 10px;"></div>
+    </div>
+  </div>
+  <div id="db_result" style="margin-left: 10px; width: calc(100% - 200px); height: calc(100vh - 20px); overflow: auto;">
+  </div>
+</div>

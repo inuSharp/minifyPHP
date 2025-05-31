@@ -1,6 +1,6 @@
 class Tab {
 
-  static #tabs = ['tab_memo', 'tab_command'];
+  static #tabs = ['tab_memo', 'tab_db'];
 
   static select(elm, id) {
     for (const tabContent of this.#tabs) {
@@ -21,6 +21,10 @@ class Tab {
       case 'tab_memo':
         Memo.fetchIndexes();
         break;
+      case 'tab_db':
+        DB.open();
+        break;
     }
+
   }
 }

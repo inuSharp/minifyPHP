@@ -99,11 +99,27 @@ switch (API_ROUTE) {
         $ret = print_r(getConfig(), true);
         break;
     case 'memo':
+        // /api/memo/index
         if (CONTROLLER_METHOD === 'index') {
             $ret = getMemoIndexes();
         }
+        // /api/memo/search?w=
         if (CONTROLLER_METHOD === 'search') {
             $ret = searchMemo();
+        }
+        break;
+    case 'db':
+        // /api/db/index
+        if (CONTROLLER_METHOD === 'index') {
+            $ret = getDBList();
+        }
+        // /api/db/table_names
+        if (CONTROLLER_METHOD === 'table_names') {
+            $ret = getDBTableNames();
+        }
+        // /api/db/table_define
+        if (CONTROLLER_METHOD === 'table_define') {
+            $ret = getTableDefine();
         }
         break;
 }

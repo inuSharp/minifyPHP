@@ -94,7 +94,7 @@ class Memo {
             window.setTimeout(() => {
               document.getElementById('message').innerHTML = '';
             }, 2000);
-          })
+          });
         }
       }
     }, 500);

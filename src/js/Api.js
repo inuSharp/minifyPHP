@@ -23,4 +23,16 @@ class Api {
   static async searchMemo(w) {
     return await this.get('/api/memo/search?w=' + w);
   }
+
+  static async fetchDBIndex() {
+    return await this.get('/api/db/index');
+  }
+
+  static async fetchDBTableNames(d) {
+    return await this.get('/api/db/table_names?d=' + d);
+  }
+
+  static async findTableDefine(d, t) {
+    return await this.get('/api/db/table_define?d=' + d + '&t=' + t);
+  }
 }

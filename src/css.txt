@@ -113,6 +113,9 @@
   #memo {
     margin-left: 4px;
   }
+  #db_result {
+    white-space: pre-wrap;
+  }
 
   pre {
     border-top: 1px dotted #eed700;

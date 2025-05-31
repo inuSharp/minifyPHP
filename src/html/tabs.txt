@@ -6,7 +6,7 @@
       class="tab is_active"
     >Memo</div>
     <div
-      onclick="Tab.select(this, 'tab_command')"
+      onclick="Tab.select(this, 'tab_db')"
       class="tab"
     >DB</div>
   </div>
@@ -15,8 +15,8 @@
     <div id="tab_memo">
       @html(memo)
     </div>
-    <div id="tab_command" style="display: none;">
-      command
+    <div id="tab_db" style="display: none;">
+      @html(db)
     </div>
   </div>
 </div>

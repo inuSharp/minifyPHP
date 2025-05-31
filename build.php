@@ -57,6 +57,8 @@ foreach ($jsFiles as $jsFile) {
     $js .= file_get_contents($jsFile) . "\n";
 }
 $js .= 'window.setTimeout(() => { App.start(); }, 100);';
+// コメントを削除
+$js = preg_replace('/\/\/.*$/m', '', $js);
 
 // php
 $php = '';
